@@ -1,0 +1,114 @@
+
+<html>
+<head>
+    <title>HeyAim!</title>
+
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="http://nodeca.github.io/js-yaml/js/js-yaml.js"></script>
+
+    <script src="tree.js" charset="utf-8"></script>
+
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0px;
+        }
+
+        .chart rect {
+        }
+        .chart .label {
+            fill: black;
+            font: 12pt sans-serif;
+        }
+        .chart .tip {
+            fill: black;
+            font: 7pt sans-serif;
+        }
+        g.node {
+        }
+    </style>
+
+</head>
+
+<body>
+    <script>
+
+        function isNumber(n) {
+            return !isNaN(parseFloat(n)) && isFinite(n);
+        }
+
+        function markToInt(m) {
+            var value;
+            if (isNumber(m)) {
+                value = m;
+            } else if (m.indexOf('sec') > -1) {
+                value = parseInt(m.replace(/\s*sec\s*/g, ''));
+            } else if (m.indexOf('min') > -1) {
+                value = parseInt(m.replace(/\s*min\s*/g, '')) * 60;
+            } else if (m.indexOf('hr') > -1) {
+                value = parseInt(m.replace(/\s*hr\s*/g, '')) * 60 * 60;
+            } else if (m.indexOf('x') > -1) {
+                value = m.split('x').map(function(x) { return parseInt(x);}).reduce(function(a,b){ return a * b; })
+            } else {
+                value = parseInt(m);
+            }
+            return value;
+        }
+
+        function getWidth(marks, value, maxWidth) {
+            var scale = d3.scale.linear()
+                .domain(marks)
+                .range([0, 100]);
+            return Math.max(0.01, scale(value) / 100) * maxWidth;
+        }
+
+        function getColor(marks, value, maxWidth) {
+            var color = d3.scale.linear()
+                .domain(marks)
+                .range(["red", "yellow", "green"]);
+            return color(value);
+        }
+
+
+        function prepareData(branch, name) {
+            var d = {
+                name : name || "/",
+                children : [],
+                width : 200,
+                color : 'lightblue',
+            };
+
+            if (branch.marks) { // it's a leaf!
+                var leaf = branch;
+
+                var value = markToInt(leaf.value);
+                var marks = leaf.marks.map(markToInt);
+
+                d.width = getWidth(marks, value, 200);
+                d.color = getColor(marks, value, 200);
+
+                d.tip = branch.value;
+            } else {
+                var i = 0;
+                for(var key in branch) {
+                    d.children.push(prepareData(branch[key], key));
+                    i++;
+                }
+                d.tip = i + " tasks";
+            }
+            return d;
+        }
+
+        d3.text('https://dl.dropboxusercontent.com/u/1272632/goals.yaml', function(response) {
+            var data = jsyaml.load(response);
+
+            console.info(data);
+            console.info(prepareData(data));
+
+            renderTree(prepareData(data));
+        });
+        
+    </script>
+</body>
+</html>
