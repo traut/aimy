@@ -2,9 +2,10 @@ var barHeight = 30;
 var glue = 2;
 var duration = 400;
 
-var margin = {top: 20, right: 10, bottom: 20, left: 10};
-var width = 600 - margin.left - margin.right,
-    height = 800 - margin.top - margin.bottom;
+var chartWidth = 200;
+
+var margin = {top: 0, right: 0, bottom: 0, left: 0};
+var height = 200 - margin.top - margin.bottom;
 
 var svg;
 var dataTree;
@@ -46,7 +47,10 @@ function update() {
         d.x = d.depth * 20;
     });
 
-    svg.attr("height", barHeight * nodes.length + glue * nodes.length + margin.top + margin.bottom);
+    var newHeight = barHeight * nodes.length + glue * nodes.length + margin.top + margin.bottom;
+    d3.select("svg.chart")
+        .attr("height", newHeight)
+        .attr("viewBox", "0 0 " + chartWidth + " " + newHeight);
 
     var nodeGroup = svg.selectAll("g.node")
         .data(nodes, function(d, i) { return d.name; })
@@ -57,8 +61,15 @@ function update() {
             .on("click", click)
 
     nodeGroup.append("svg:rect")
+        .attr("width", chartWidth - 1)
+        .attr("height", barHeight - 2)
+        .style("stroke", function(d, i) { return d.color; })
+        .style("stroke-width", "1px")
+        .style("fill", "none");
+
+    nodeGroup.append("svg:rect")
         .attr("width", function(d, i) { return d.width; })
-        .attr("height", barHeight - 1)
+        .attr("height", barHeight - 2)
         .style("fill", function(d, i) { return d.color; });
 
     nodeGroup.append("svg:text")
@@ -70,8 +81,8 @@ function update() {
 
     nodeGroup.append("svg:text")
         .attr("text-anchor", "end")
-        .attr("x", function(d) { return d.width; })
-        .attr("dx", 0)
+        .attr("x", function(d) { return chartWidth; })
+        .attr("dx", -2)
         .attr("dy", 25)
         .attr("class", "tip")
         .text(function(d) { return d.tip; });
@@ -80,7 +91,8 @@ function update() {
         .data(nodes, function(d, i) { return d.name; });
 
     var nodeUpdate = node
-        .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+        //.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+        .attr("transform", function(d) { return "translate(0," + d.y + ")"; })
         .transition()
             .duration(duration)
             .style("opacity", "1");
@@ -89,7 +101,8 @@ function update() {
         .style("opacity", "0")
         .transition()
             .duration(duration)
-            .attr("transform", function(d) { return "translate(" + d.parent.x + "," + d.parent.y + ")"; })
+            //.attr("transform", function(d) { return "translate(" + d.parent.x + "," + d.parent.y + ")"; })
+            .attr("transform", function(d) { return "translate(0," + d.parent.y + ")"; })
         .remove();
 
 }
@@ -98,16 +111,16 @@ function renderTree(data) {
 
     svg = d3.select("body").append("svg")
         .attr("class", "chart")
-        .attr("width", width + margin.left + margin.right)
+        //.attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
+        .attr("viewBox", "0 0 " + chartWidth + " " + height)
     .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
     dataTree = data;
 
-    svg.attr("height", height + margin.top + margin.bottom);
-    layout.size([width, height])
+    //layout.size([width, height])
 
     data.children.forEach(collapse);
     update(data);
