@@ -1,11 +1,10 @@
-var barHeight = 30;
+var barHeight = 50;
 var glue = 2;
 var duration = 400;
 
-var chartWidth = 200;
+var chartWidth = 500;
 
 var margin = {top: 0, right: 0, bottom: 0, left: 0};
-var height = 200 - margin.top - margin.bottom;
 
 var svg;
 var dataTree;
@@ -17,6 +16,11 @@ function collapse(d) {
         d.children = null;
     }
 }
+
+function isNumber(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
 
 function click(d) {
     if (d.children && d.children.length > 0) {
@@ -49,8 +53,7 @@ function update() {
 
     var newHeight = barHeight * nodes.length + glue * nodes.length + margin.top + margin.bottom;
     d3.select("svg.chart")
-        .attr("height", newHeight)
-        .attr("viewBox", "0 0 " + chartWidth + " " + newHeight);
+        .attr("height", newHeight);
 
     var nodeGroup = svg.selectAll("g.node")
         .data(nodes, function(d, i) { return d.name; })
@@ -60,30 +63,36 @@ function update() {
             .style("opacity", "0")
             .on("click", click)
 
-    nodeGroup.append("svg:rect")
-        .attr("width", chartWidth - 1)
-        .attr("height", barHeight - 2)
-        .style("stroke", function(d, i) { return d.color; })
-        .style("stroke-width", "1px")
-        .style("fill", "none");
+    var heightWithoutGlue = barHeight - glue;
 
     nodeGroup.append("svg:rect")
-        .attr("width", function(d, i) { return d.width; })
-        .attr("height", barHeight - 2)
+        .attr("width", chartWidth)
+        .attr("height", heightWithoutGlue)
+        .attr("rx", "5px")
+        .attr("ry", "5px")
+        //.style("fill", function(d) { return d3.rgb(d.color).brighter();} );
+        .style("fill", function(d) { return d.color; } )
+        .style("opacity", "0.3");
+
+    nodeGroup.append("svg:rect")
+        .attr("width", function(d, i) { return (isNumber(d.width)) ? d.width : chartWidth; })
+        .attr("height", heightWithoutGlue)
+        .attr("rx", "5px")
+        .attr("ry", "5px")
         .style("fill", function(d, i) { return d.color; });
 
     nodeGroup.append("svg:text")
         .attr("x", 0)
         .attr("dx", 5)
-        .attr("dy", 20)
+        .attr("dy", barHeight * (3/5))
         .attr("class", "label")
         .text(function(d) { return d.name; });
 
     nodeGroup.append("svg:text")
         .attr("text-anchor", "end")
         .attr("x", function(d) { return chartWidth; })
-        .attr("dx", -2)
-        .attr("dy", 25)
+        .attr("dx", -3)
+        .attr("dy", barHeight * (4/5))
         .attr("class", "tip")
         .text(function(d) { return d.tip; });
 
@@ -111,9 +120,8 @@ function renderTree(data) {
 
     svg = d3.select("body").append("svg")
         .attr("class", "chart")
-        //.attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .attr("viewBox", "0 0 " + chartWidth + " " + height)
+        //.attr("viewBox", "0 0 " + chartWidth + " 600")
+        .attr("preserveAspectRatio", "xMinYMin meet")
     .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 

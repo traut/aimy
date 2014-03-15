@@ -18,14 +18,14 @@
         }
 
         .chart {
-            width: 200px;
+            width: 100%;
             height: auto;
             display: block;
             margin: 0px;
-            cursor: pointer;
         }
 
-        @media screen and (max-device-width: 480px){
+        /*@media screen and (max-device-width: 480px){*/
+        @media (max-device-width: 480px){
             .chart {
                 width: 100%;
                 height: auto;
@@ -33,16 +33,19 @@
                 margin: 0px;
             }
         }
+        .chart rect {
+            cursor: pointer;
+        }
         .chart text {
             fill: black;
             font-weight: 300;
             font-family: Helvetica, sans-serif;
         }
         .chart text.label {
-            font-size: 12pt;
+            font-size: 15pt;
         }
         .chart text.tip {
-            font-size: 7pt;
+            font-size: 10pt;
         }
         g.node {
         }
@@ -52,10 +55,6 @@
 
 <body>
     <script>
-
-        function isNumber(n) {
-            return !isNaN(parseFloat(n)) && isFinite(n);
-        }
 
         function markToInt(m) {
             var value;
@@ -81,8 +80,8 @@
                 .range(marks.map(function(m, i) {
                     return (100/marks.length) * i;
                 }));
-            console.info(marks, value, scale(value), Math.max(0.01, scale(value) / 100))
             return Math.max(0, scale(value) / 100) * maxWidth;
+            //return Math.max(0, scale(value));
         }
 
         function getColor(marks, value) {
@@ -98,7 +97,6 @@
                 name : name || "/",
                 children : [],
                 color : 'lightblue',
-                width: 200,
             };
 
             if (branch.marks) { // it's a leaf!
@@ -107,7 +105,7 @@
                 var value = markToInt(leaf.value);
                 var marks = leaf.marks.map(markToInt);
 
-                d.width = getWidth(marks, value, 200);
+                d.width = getWidth(marks, value, chartWidth);
                 d.color = getColor(marks, value);
 
                 d.tip = branch.value;
