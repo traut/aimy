@@ -1,0 +1,104 @@
+fitness:
+    conving conditioning:
+        pushups:
+            close pushups:
+                value: 2x20
+                goals: [1x5, 2x10, 2x20]
+            uneven pushups: 
+                value: 2x15
+                goals: [1x5, 2x10, 2x20]
+            half one arm pushups:
+                value: 2x20
+                goals: [1x5, 2x10, 2x20]
+            lever pushups:
+                value: 2x15
+                goals: [1x5, 2x10, 2x20]
+            one arm pushups:
+                value: 0
+                goals: [1x5, 2x10, 1x100]
+        bridges: 
+            straight bridges:
+                value: 3x40
+                goals: [1x10, 2x30, 3x40]
+            angled bridges:
+                value: 3x30
+                goals: [1x8, 2x15, 3x30]
+            head bridges:
+                value: 2x20
+                goals: [1x8, 2x15, 2x25]
+            half bridges:
+                value: 0
+                goals: [1x8, 2x15, 2x20]
+        squats:
+            close squats:
+                value: 2x40
+                goals: [1x10, 2x15, 2x20]
+            uneven squats:
+                value: 2x20
+                goals: [1x5, 2x10, 2x20]
+            half one leg squats:
+                value: 2x13
+                goals: [1x5, 2x10, 2x20]
+        handstand pushups: 
+            wall headstands: 
+                value: 40sec
+                goals: [30sec, 1min, 2min]
+            crow stands:
+                value: 48sec
+                goals: [10sec, 30sec, 1min]
+            wall handstands: 
+                value: 0sec
+                goals: [30sec, 1min, 2min]
+        leg raises: {}
+        pullups: {}
+    swimming:
+        3km time:
+            value: 50min
+            goals: [90min, 60min, 45min]
+    burpies: 
+        100 burpies time:
+            value: 8min
+            goals: [10min, 8min, 6min]
+        max burpies session:
+            value: 100
+            goals: [100, 150, 200]
+
+finances:
+    savings:
+        value: 30K
+        goals: [10K, 50K, 100K, 1M]
+    mortgage payments:
+        value: 10K
+        goals: [0, 50K, 150K]
+
+health:
+    body weight:
+        value: 90kg
+        goals: [110kg, 90kg, 70kg]
+    body fat:
+        value: 23%
+        goals: [30%, 20%, 10%]
+    beard length:
+        value: 3cm
+        goals: [0cm, 5cm, 15cm]
+    cigarettes per day:
+        value: 2
+        goals: [15, 10, 5, 0]
+
+bussiness:
+    monthly revenue:
+        value: 40K
+        goals: [0K, 50K, 100K]
+    daily active users:
+        value: 2000
+        goals: [100, 2000, 50000]
+
+misc:
+    books read in 2014:
+        value: 12
+        goals: [5, 10, 20, 30]
+    pet projects in 2014:
+        value: 3
+        goals: [1, 5, 10]
+
+
