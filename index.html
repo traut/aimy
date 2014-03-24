@@ -18,8 +18,9 @@
         }
 
         .chart {
-            width: 100%;
             height: auto;
+            width: 300px;
+            float: left;
             display: block;
             margin: 0px;
         }
@@ -74,21 +75,23 @@
             return value;
         }
 
-        function getWidth(marks, value, maxWidth) {
+        function getWidth(goals, value, maxWidth) {
             var scale = d3.scale.linear()
-                .domain(marks)
-                .range(marks.map(function(m, i) {
-                    return (100/marks.length) * i;
-                }));
-            return Math.max(0, scale(value) / 100) * maxWidth;
+                .domain(goals)
+                .range(goals.map(function(m, i) { return (100/goals.length) * i; }));
+            return Math.min(1, Math.max(0, scale(value) / 100)) * maxWidth;
             //return Math.max(0, scale(value));
         }
 
-        function getColor(marks, value) {
+        function getColor(goals, value) {
+            var prc = d3.scale.linear()
+                .domain(goals)
+                .range(goals.map(function(m, i) { return (1/goals.length) * i; }));
+
             var color = d3.scale.linear()
-                .domain(marks)
+                .domain([0, 0.5, 1])
                 .range(["red", "yellow", "green"]);
-            return color(value);
+            return color(Math.min(1, Math.max(0, prc(value))));
         }
 
 
@@ -99,14 +102,16 @@
                 color : 'lightblue',
             };
 
-            if (branch.marks) { // it's a leaf!
+            if (branch.goals) { // it's a leaf!
                 var leaf = branch;
 
                 var value = markToInt(leaf.value);
-                var marks = leaf.marks.map(markToInt);
+                var goals = leaf.goals.map(markToInt);
 
-                d.width = getWidth(marks, value, chartWidth);
-                d.color = getColor(marks, value);
+                d.width = getWidth(goals, value, chartWidth - margin.left - margin.right);
+                d.color = getColor(goals, value);
+
+                console.info(d, value, goals, d.width, d.color);
 
                 d.tip = branch.value;
             } else {
@@ -120,13 +125,15 @@
             return d;
         }
 
-        d3.text('https://dl.dropboxusercontent.com/u/1272632/goals.yaml', function(response) {
+        d3.text('https://dl.dropboxusercontent.com/s/01m9kbk2jetzuop/goals-example.yaml', function(response) {
             var data = jsyaml.load(response);
 
             console.info(data);
             console.info(prepareData(data));
 
-            renderTree(prepareData(data));
+            for(toplevel in data) {
+                renderTree(prepareData(data[toplevel]));
+            }
         });
         
     </script>

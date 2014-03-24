@@ -49,8 +49,8 @@ fitness:
             wall handstands: 
                 value: 0sec
                 goals: [30sec, 1min, 2min]
-        leg raises: {}
-        pullups: {}
+        leg raises: []
+        pullups: []
     swimming:
         3km time:
             value: 50min
