@@ -133,7 +133,7 @@
             console.info(prepareData(data));
 
             for(toplevel in data) {
-                renderTree(prepareData(data[toplevel]));
+                renderTree(prepareData(data[toplevel], toplevel));
             }
         });
         
