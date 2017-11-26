@@ -98,7 +98,6 @@
 
         function prepareData(branch, name) {
             var d = {
-                name : name || "/",
                 children : [],
                 color : 'lightblue',
             };
@@ -111,11 +110,13 @@
 
                 d.width = getWidth(goals, value, chartWidth - margin.left - margin.right);
                 d.color = getColor(goals, value);
-
+                d.name = name;
+                    
                 console.info(d, value, goals, d.width, d.color);
 
                 d.tip = branch.value;
             } else {
+                d.name = name + " /";
                 var i = 0;
                 for(var key in branch) {
                     d.children.push(prepareData(branch[key], key));
@@ -133,7 +134,7 @@
             console.info(prepareData(data));
 
             for(toplevel in data) {
-                renderTree(prepareData(data[toplevel], toplevel + " /"));
+                renderTree(prepareData(data[toplevel], toplevel));
             }
         });
         
