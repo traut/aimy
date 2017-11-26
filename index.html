@@ -5,8 +5,8 @@
 
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-    <script src="http://nodeca.github.io/js-yaml/js/js-yaml.js"></script>
+    <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="https://raw.githubusercontent.com/nodeca/js-yaml/master/lib/js-yaml.js"></script>
 
     <script src="tree.js" charset="utf-8"></script>
 
@@ -125,7 +125,7 @@
             return d;
         }
 
-        d3.text('https://dl.dropboxusercontent.com/s/01m9kbk2jetzuop/goals-example.yaml', function(response) {
+        d3.text('https://raw.githubusercontent.com/traut/aimy/master/goals.yaml', function(response) {
             var data = jsyaml.load(response);
 
             console.info(data);
